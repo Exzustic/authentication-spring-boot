@@ -1,6 +1,9 @@
 package com.study.auth_demo.response;
 
+import java.util.UUID;
+
 public record AuthenticationResponseDto(
-        String token
+        String accessToken,
+        UUID refreshToken
 ) {
 }

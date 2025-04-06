@@ -5,10 +5,9 @@ import com.study.auth_demo.response.AuthenticationResponseDto;
 import com.study.auth_demo.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -24,5 +23,20 @@ public class AuthController {
     return ResponseEntity.ok(
             authenticationService.authenticate(authenticationRequestDto)
     );
+  }
+
+  @PostMapping("/refresh-token")
+  public ResponseEntity<AuthenticationResponseDto> refreshToken(
+          @RequestParam UUID refreshToken
+  ) {
+    AuthenticationResponseDto response = authenticationService
+            .refreshToken(refreshToken);
+    return ResponseEntity.ok(response);
+  }
+
+  @PostMapping("/logout")
+  public ResponseEntity<Void> revokeToken(@RequestParam UUID refreshToken){
+    authenticationService.revokeRefreshToken(refreshToken);
+    return ResponseEntity.noContent().build();
   }
 }
